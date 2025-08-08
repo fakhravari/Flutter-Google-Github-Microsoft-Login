@@ -1,38 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ورود با گوگل',
+      title: 'Google Sign-In Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const GoogleSignInScreen(),
+      home: GoogleSignInDemo(),
     );
   }
 }
 
-class GoogleSignInScreen extends StatefulWidget {
-  const GoogleSignInScreen({super.key});
-
+class GoogleSignInDemo extends StatefulWidget {
   @override
-  State<GoogleSignInScreen> createState() => _GoogleSignInScreenState();
+  _GoogleSignInDemoState createState() => _GoogleSignInDemoState();
 }
 
-class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
+class _GoogleSignInDemoState extends State<GoogleSignInDemo> {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId:
-        '995356823510-j6t7ef2f2qkpsn2d3j5t2dfat3q9iqm4.apps.googleusercontent.com',
-    scopes: ['email', 'profile'],
+    scopes: ['email'],
+    clientId: kIsWeb
+        ? '995356823510-is9p4904gpthvgvlb3hl66in0ppbakhr.apps.googleusercontent.com'
+        : (kReleaseMode
+              ? '995356823510-hf0ispnor494kjvqb9rrv5niujjs0np6.apps.googleusercontent.com'
+              : '995356823510-rucj102uqjmg4bdtria3voe00am30kre.apps.googleusercontent.com'),
   );
+
   GoogleSignInAccount? _currentUser;
-  String _status = 'وارد نشده';
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -40,21 +41,18 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
     _googleSignIn.onCurrentUserChanged.listen((account) {
       setState(() {
         _currentUser = account;
-        _status = account != null ? 'وارد شده' : 'وارد نشده';
       });
     });
-
-    // بررسی اگر کاربر از قبل وارد شده باشد
     _googleSignIn.signInSilently();
   }
 
   Future<void> _handleSignIn() async {
     try {
       await _googleSignIn.signIn();
+      setState(() => _errorMessage = '');
     } catch (error) {
-      setState(() {
-        _status = 'خطا در ورود: $error';
-      });
+      setState(() => _errorMessage = 'خطا در ورود: $error');
+      print(_errorMessage);
     }
   }
 
@@ -62,67 +60,45 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
     try {
       await _googleSignIn.signOut();
       setState(() {
-        _status = 'با موفقیت خارج شدید';
+        _currentUser = null;
+        _errorMessage = '';
       });
     } catch (error) {
-      setState(() {
-        _status = 'خطا در خروج: $error';
-      });
+      setState(() => _errorMessage = 'خطا در خروج: $error');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ورود با گوگل')),
+      appBar: AppBar(title: Text('ورود با گوگل')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             if (_currentUser != null) ...[
-              if (_currentUser!.photoUrl != null)
-                CircleAvatar(
-                  backgroundImage: NetworkImage(_currentUser!.photoUrl!),
-                  radius: 50,
-                ),
-              const SizedBox(height: 20),
-              Text(
-                _currentUser!.displayName ?? 'نام نامعلوم',
-                style: const TextStyle(fontSize: 24),
+              CircleAvatar(
+                backgroundImage: NetworkImage(_currentUser!.photoUrl ?? ''),
+                radius: 40,
               ),
-              Text(_currentUser!.email, style: const TextStyle(fontSize: 16)),
-              const SizedBox(height: 20),
-            ],
-            Text('وضعیت: $_status', style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 30),
-            if (_currentUser == null)
-              ElevatedButton(
-                onPressed: _handleSignIn,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 15,
-                  ),
-                ),
-                child: const Text(
-                  'ورود با حساب گوگل',
-                  style: TextStyle(fontSize: 18),
-                ),
-              )
-            else
+              SizedBox(height: 16),
+              Text('نام: ${_currentUser!.displayName ?? 'نامشخص'}'),
+              Text('ایمیل: ${_currentUser!.email}'),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _handleSignOut,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 15,
-                  ),
-                  backgroundColor: Colors.red,
-                ),
-                child: const Text(
-                  'خروج از حساب',
-                  style: TextStyle(fontSize: 18),
-                ),
+                child: Text('خروج از حساب'),
+              ),
+            ] else ...[
+              ElevatedButton(
+                onPressed: _handleSignIn,
+                child: Text('ورود با گوگل'),
+              ),
+            ],
+            if (_errorMessage.isNotEmpty)
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(_errorMessage, style: TextStyle(color: Colors.red)),
               ),
           ],
         ),
