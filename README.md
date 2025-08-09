@@ -11,7 +11,7 @@ keytool -list -v -keystore C:\keystore\keystore_sigin.jks -alias upload -storepa
 ------------------------------------------------
 
 debug
-SHA1: 58:48:C2:98:AB:B6:76:5B:51:14:E5:9B:29:65:3A:E5:15:D2:9E:58
+SHA1: A4:C9:F6:D5:D0:4F:9D:42:DB:E9:91:72:50:F2:EB:E9:F2:27:54:24
 Client ID: 995356823510-rucj102uqjmg4bdtria3voe00am30kre.apps.googleusercontent.com
 
 
