@@ -6,9 +6,7 @@ class GoogleSignInConfig {
   static Map<String, dynamic>? _config;
 
   static Future<void> loadConfig() async {
-    final jsonString = await rootBundle.loadString(
-      'assets/config/google_sign_in_config.json',
-    );
+    final jsonString = await rootBundle.loadString('assets/config.json');
     _config = json.decode(jsonString);
   }
 
