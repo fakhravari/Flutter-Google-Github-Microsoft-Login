@@ -1,5 +1,10 @@
 https://login.kiandent.ir/
- 
+
+
+1) ساخت keystore دیباگ و ریلیز و رفتن sha1
+2) تنظیمات keystore در build.gradle.kts
+3) وب بدون تغیر است
+
 ------------------------------------------------
 keytool -genkey -v -keystore C:\keystore\keystore_sigin.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
 keytool -list -v -keystore C:\keystore\keystore_sigin.jks -alias upload -storepass 13691372 -keypass 13691372
