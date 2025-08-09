@@ -14,7 +14,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.flutter_application_1"
+    namespace = "com.flutterlogin"
     compileSdk = 35
     ndkVersion = "27.0.12077973"
 
@@ -28,7 +28,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.flutter_application_1"
+        applicationId = "com.flutterlogin"
         minSdk = 21
         targetSdk = 35
         versionCode = (findProperty("flutter.versionCode") as? String)?.toInt() ?: 1
