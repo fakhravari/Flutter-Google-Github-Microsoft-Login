@@ -9,6 +9,10 @@ debug
 SHA1: 58:48:C2:98:AB:B6:76:5B:51:14:E5:9B:29:65:3A:E5:15:D2:9E:58
 Client ID: 995356823510-rucj102uqjmg4bdtria3voe00am30kre.apps.googleusercontent.com
 
+
+1) cmd>    cd /d D:\Repositories\GitHub\Flutter-Google-Github-Microsoft-Login\android 
+2) gradlew signingReport
+
 keytool -list -v -alias androiddebugkey -keystore %USERPROFILE%\.android\debug.keystore -storepass android -keypass android
 ----------------
 relese
