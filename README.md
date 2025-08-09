@@ -21,10 +21,9 @@ SHA1:  BA:FE:15:3E:2B:74:13:DD:A7:95:7E:DB:E4:78:EE:9F:4E:8F:1E:BC
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 ----------------
-
-
-
 git add file 
 use folder android > git add -f key.properties
 git commit -m "Add key.properties to repo"
 git push
+--------------------------------------------------
+flutter run -d web-server

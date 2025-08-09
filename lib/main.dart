@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_application_1/SignInConfig.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 void main() {
@@ -25,11 +26,7 @@ class GoogleSignInDemo extends StatefulWidget {
 class _GoogleSignInDemoState extends State<GoogleSignInDemo> {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email'],
-    clientId: kIsWeb
-        ? '995356823510-is9p4904gpthvgvlb3hl66in0ppbakhr.apps.googleusercontent.com'
-        : (kReleaseMode
-              ? '995356823510-hf0ispnor494kjvqb9rrv5niujjs0np6.apps.googleusercontent.com'
-              : '995356823510-rucj102uqjmg4bdtria3voe00am30kre.apps.googleusercontent.com'),
+    clientId: GoogleSignInConfig.clientId,
   );
 
   GoogleSignInAccount? _currentUser;
