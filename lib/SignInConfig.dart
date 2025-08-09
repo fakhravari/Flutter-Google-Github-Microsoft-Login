@@ -1,15 +1,30 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class GoogleSignInConfig {
+  static Map<String, dynamic>? _config;
+
+  static Future<void> loadConfig() async {
+    final jsonString = await rootBundle.loadString(
+      'assets/config/google_sign_in_config.json',
+    );
+    _config = json.decode(jsonString);
+  }
+
   static String get clientId {
+    assert(_config != null, 'Config not loaded! Call loadConfig() first.');
+
     if (kIsWeb) {
-      return '995356823510-is9p4904gpthvgvlb3hl66in0ppbakhr.apps.googleusercontent.com';
+      return _config!['web'];
     } else {
-      bool isRelease = bool.fromEnvironment('dart.vm.product');
-      if (isRelease) {
-        return '995356823510-hf0ispnor494kjvqb9rrv5niujjs0np6.apps.googleusercontent.com';
+      final isRelease = bool.fromEnvironment('dart.vm.product');
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        return isRelease
+            ? _config!['android_release']
+            : _config!['android_debug'];
       } else {
-        return '995356823510-rucj102uqjmg4bdtria3voe00am30kre.apps.googleusercontent.com';
+        throw UnsupportedError('Platform not supported');
       }
     }
   }
